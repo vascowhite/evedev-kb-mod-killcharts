@@ -1,5 +1,10 @@
 # KillCharts by vasco di #
 
+---
+## This project is no longer supported. Feel free to copy the code and use as you wish.
+
+Developed for version 3.0+ of EVE Development Network Killboard, created for EVE Online corporations and alliances. Based on the EVE-Killboard created by rig0r, it is now developed and maintained by the EVE-Dev group. All EVE graphics and data used are property of CCP.
+
 V2.0 Completely rewritten and revised June 2011
 The code has been completely rewritten since version 1 to use built in EDK routines as much as possible. It should now comply with all your board settings and some of the annoying little bugs from version 1 should now be cleared.
 **I will no longer support versions < 2.0 of this mod.**
@@ -60,6 +65,6 @@ Removed flash option to simplify code. This option or a `<canvas>` based option 
   * V2.01 1st July 2011
 Added ability to navigate through chart to page showing 1 day's activity.
 
-**I haven't had an active board to test this out on, so I'd be interested in seeing it in action on Alliance, multiple Corp and single pilot boards.
-(links please :))
-It should work on those boards, but haven't been able to test it.**
+  * 14th October 2015
+ - Migrated from to Google Code to Github.
+ - Removed the RGraph feature as this was being used contrary to the EULA for that package. Also, I had stupidly hosted the RGraph files on my own server, so it was getting hammered!
