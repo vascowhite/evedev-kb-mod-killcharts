@@ -80,10 +80,10 @@ class KillChart
                 $html .= $this->genTable();
                 break;
             case 'bar':
-                $html .= $this->generateBar();
+                $html .= $this->genTable();
                 break;
             case 'line':
-                $html .= $this->generateLine();
+                $html .= $this->genTable();
                 break;
             default :
                 $html .= $this->genTable();
@@ -105,16 +105,19 @@ class KillChart
         foreach($dates as $date){
             if(strtotime($date) > strtotime($this->startDate)){
                 //generate top row
+                $topRow = '';
                 $topRow .= "<td title='{$kills[$date][0]} ({$kills[$date][1]} kills)'>";
                 $dayNum = date('d', strtotime($kills[$date][0]));
                 $topRow .= "<small>$dayNum</small></td>";
                 
                 //generate bottom row
+                $botRow = '';
                 $botRow .= "<td title='{$losses[$date][0]} ({$losses[$date][1]} Losses)'>";
                 $dayNum = date('d', strtotime($losses[$date][0]));
                 $botRow .= "<small>$dayNum</small></td>";
                 
                 //generate graph
+                $graph = '';
                 $graph .= "<td onclick=\"window.location.href='" . KB_HOST . "?a=killcharts&d={$kills[$date][0]}';\"";
                 $graph .= " style='cursor:pointer;padding:0;' ";
                 $graph .= "title='{$kills[$date][0]} ({$kills[$date][1]} kills : {$losses[$date][1]} losses)'>\n";
@@ -128,6 +131,7 @@ class KillChart
         }
         
         //style
+        $html = '';
         $html .= "<style>\n";
 	$html .= ".vertbarkill{position:absolute; bottom:0; left:0; background:$kbarColour; font-size: 4px;width:49%;}\n";
 	$html .= ".vertbarloss{position:absolute; bottom:0; right:0; background:$lbarColour; font-size: 4px;width:49%;}\n";
@@ -152,113 +156,6 @@ class KillChart
        
 	$html .= "</table>\n";
         
-        return $html;
-    }
-    
-    private function generateBar()
-    {
-        $bgColour = 'rgb(' . $this->hex2RGB(Config::get('mod_killcharts_bgcol'), true) . ')';
-        $kbarColour = 'rgb(' . $this->hex2RGB(Config::get('mod_killcharts_killcol'), true) . ')';
-        $lbarColour = 'rgb(' . $this->hex2RGB(Config::get('mod_killcharts_losscol'), true) . ')';
-        $dates = array_keys($this->kills);
-        $kills = $this->kills;
-        $losses = $this->losses;
-        $data = array();
-        $ticks = array();
-        $toolTips = array();
-        
-        foreach($dates as $date){
-            if(strtotime($date) > strtotime($this->startDate)){
-                $data[] = array($kills[$date][1], $losses[$date][1]);
-                $toolTips[] = "<a href='" . KB_HOST . "?a=killcharts&d={$kills[$date][0]}'>{$kills[$date][0]}</a>\n<br/>Kills " . $kills[$date][1] . "<br/>Losses " . $losses[$date][1];
-                $toolTips[] = "<a href='" . KB_HOST . "?a=killcharts&d={$kills[$date][0]}'>{$kills[$date][0]}</a>\n<br/>Kills " . $kills[$date][1] . "<br/>Losses " . $losses[$date][1];
-                $ticks[] = date('d', strtotime($kills[$date][0]));
-            }
-        }
-        $data = json_encode($data);
-        $ticks = json_encode($ticks);
-        $toolTips = json_encode($toolTips);
-        
-        $html = "<script src=\"http://www.vascowhite.co.uk/RGraph/RGraph.common.core.js\"></script>\n";
-        $html .= "<script src='http://www.vascowhite.co.uk/RGraph/RGraph.bar.js'></script>\n";
-        $html .= "<script src='http://www.vascowhite.co.uk/RGraph/RGraph.common.context.js'></script>\n";
-        $html .= "<script src='http://www.vascowhite.co.uk/RGraph/RGraph.common.tooltips.js'></script>\n";
-        $html .= "<script src='http://www.vascowhite.co.uk/RGraph/RGraph.common.effects.js'></script>\n";
-        $html .= "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js\" ></script>";
-        $html .= '<canvas id="KCbarchart" width="760"; height="200">' . $this->genTable() .'</canvas>';
-        $html .= "<script>\n";
-        $html .= "\tvar data = $data;\n";
-        $html .= "\tvar ticks = $ticks;\n";
-        $html .= "\tvar toolTips = $toolTips;\n";
-        $html .= "\tvar kbarColour = '$kbarColour';\n";
-        $html .= "\tvar lbarColour = '$lbarColour';\n";
-        $html .= "\tvar bgColour = '$bgColour';\n";
-        $html .= "\tvar maxKills = {$this->maxKills}";
-        $html .= "</script>\n";
-        $html .= "<script src='" . KB_HOST . "/mods/killcharts/bar.js'></script>\n";
-        $html .= "<script>ShowCombination(barGraph);</script>\n";
-        return $html;
-    }
-
-    private function generateLine()
-    {
-        $bgColour = 'rgb(' . $this->hex2RGB(Config::get('mod_killcharts_bgcol'), true) . ')';
-        $kbarColour = 'rgb(' . $this->hex2RGB(Config::get('mod_killcharts_killcol'), true) . ')';
-        $lbarColour = 'rgb(' . $this->hex2RGB(Config::get('mod_killcharts_losscol'), true) . ')';
-        $dates = array_keys($this->kills);
-        $kills = $this->kills;
-        $losses = $this->losses;
-        $killLine = array();
-        $lossLine = array();
-        $ticks = array();
-        $toolTips = array();
-        $TTDates = array();
-        
-        foreach($dates as $date){
-            if(strtotime($date) > strtotime($this->startDate)){
-                $killLine[] = $kills[$date][1];
-                $lossLine[] = $losses[$date][1];
-                $ticks[] = date('d', strtotime($kills[$date][0]));
-                $toolTips[] = $this->makeToolTip($date);
-                $TTDates[] = $date;
-            }
-        }
-        //again for lossline tooltips
-        foreach($dates as $date){
-            if(strtotime($date) > strtotime($this->startDate)){
-                $toolTips[] = $this->makeToolTip($date);
-                $TTDates[] = $date;
-            }
-        }
-        $killLine = json_encode($killLine);
-        $lossLine = json_encode($lossLine);
-        $ticks = json_encode($ticks);
-        $toolTips = json_encode($toolTips);
-        $TTDates = json_encode($TTDates);
-        
-        $html = "<script src=\"http://www.vascowhite.co.uk/RGraph/RGraph.common.core.js\"></script>\n";
-        $html .= "<script src='http://www.vascowhite.co.uk/RGraph/RGraph.common.context.js'></script>\n";
-        $html .= "<script src='http://www.vascowhite.co.uk/RGraph/RGraph.common.tooltips.js'></script>\n";
-        $html .= "<script src='http://www.vascowhite.co.uk/RGraph/RGraph.common.effects.js'></script>\n";
-        $html .= "<script src='http://www.vascowhite.co.uk/RGraph/RGraph.line.js'></script>\n";
-        $html .= "<script src='http://www.vascowhite.co.uk/RGraph/RGraph.hbar.js'></script>\n";
-        $html .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . KB_HOST . "/mods/killcharts/tooltips.css\" />";
-        $html .= '<canvas id="KClinechart" width="760"; height="200">' . $this->genTable() . '</canvas>';
-        $html .= "<script>\n";
-        $html .= "\tvar killLine = $killLine;\n";
-        $html .= "\tvar lossLine = $lossLine;\n";
-        $html .= "\tvar ticks = $ticks;\n";
-        $html .= "\tvar numDays = $this->days;\n";
-        $html .= "\tvar toolTips = $toolTips;\n";
-        $html .= "\tvar TTDates = $TTDates;\n";
-        $html .= "\tvar KB_HOST = '" . KB_HOST . "';\n";
-        $html .= "\tvar kbarColour = '$kbarColour';\n";
-        $html .= "\tvar lbarColour = '$lbarColour';\n";
-        $html .= "\tvar bgColour = '$bgColour';\n";
-        $html .= "\tvar maxKills = {$this->maxKills}";
-        $html .= "</script>\n";
-        $html .= "<script src='" . KB_HOST . "/mods/killcharts/line.js'></script>\n";
-        $html .= "<script>ShowCombination(lineGraph);</script>\n";
         return $html;
     }
     

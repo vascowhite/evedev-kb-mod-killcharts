@@ -66,6 +66,7 @@ class killcharts extends pageAssembly {
     function campaigns() {
         // Display campaigns, if any.
         if (Killboard::hasCampaigns(true)) {
+            $html = '';
             $html .= "<div class=\"kb-campaigns-header\">Active campaigns</div>";
             $list = new ContractList();
             $list->setActive("yes");
@@ -120,7 +121,7 @@ class killcharts extends pageAssembly {
         $table = new KillListTable($klist);
         if ($this->showcombined)
             $table->setCombined(true);
-        $html .= $table->generate();
+        $html = $table->generate();
         return $html;
     }
 
@@ -133,7 +134,7 @@ class killcharts extends pageAssembly {
         if ($this->view == 'kills')
             $suffix = '&amp;view=kills';
         elseif ($this->view == 'losses')
-            $suffix .= '&amp;view=losses';
+            $suffix = '&amp;view=losses';
         if ($this->scl_id)
             $suffixscl = '&amp;scl_id=' . $this->scl_id;
 
@@ -176,7 +177,7 @@ class killcharts extends pageAssembly {
 
             $tklist->generate();
             $tkbox = new AwardBox($tklist, "Top killers", "kills in " . $this->getCurrentPeriod(), "kills", "eagle");
-            $html .= $tkbox->generate();
+            $html = $tkbox->generate();
         }
         if ($this->view == 'losses') {
             $tllist = new TopLossesList();

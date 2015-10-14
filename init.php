@@ -22,7 +22,7 @@ class kgraph{
   	
   function generate(){
   		$killchart = new KillChart();
-  		$html .= $killchart->generate();
+  		$html = $killchart->generate();
   		return $html;
   }
 
