@@ -1,4 +1,4 @@
-# KillCharts by vasco di #
+# KillCharts
 
 ---
 ## This project is no longer supported. Feel free to copy the code and use as you wish.
