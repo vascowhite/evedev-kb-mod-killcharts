@@ -27,17 +27,19 @@ There is no warranty with this mod, you install it and use it at your own risk.
 After installing and enabling the mod a link to the settings page should apear as indicated by the red 1 in the image below. You may need to refresh the page to see this.
 
 ### Explanation of options ###
-  * #### Number of days to trend ####
+  * ### Number of days to trend
 > The number of days that will be charted. I found 30 worked best for  me, so this is the default. In fact I found that more than 30 looks too crowded, so this is the limit.
 
-  * ### Colour of Kill Bars ###
+  * ### Colour of Kill Bars
 The colour that kills will be displayed in.
 
-  * #### Colour of Loss Bars ####
+  * ### Colour of Loss Bars
 The colour that losses will be displayed in.
-  * #### Background Colour ####
+
+  * ### Background Colour
 The colour of the chart background.
-  * #### Reset Default Values ####
+
+  * ### Reset Default Values
 Does what it says on the tin :
 
 
