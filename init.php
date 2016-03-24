@@ -129,8 +129,7 @@ class kgraph{
   	$html = '<p>';
   	$html .= "by vasco di (Paul White 2011)";
   	$html .= '</p>';
-  	$html .= "<p>Detailed instructions,support and updates are available on the <a  target='_blank' href='http://eve-id.net/forum/viewtopic.php?f=505&t=16828'>EVE Development Network</a>";
-        $html .= " and now also on  <a target='_blank' href='http://code.google.com/p/evedev-kb-mod-killcharts'>google code</a></p>";
+  	$html .= "<p>Detailed instructions,support and updates are available on <a target='_blank' href='https://github.com/vascowhite/evedev-kb-mod-killcharts'>Github</a></p>";
   	return $html;
   }
 }
